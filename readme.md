@@ -9,3 +9,7 @@ pio run -e esp12e -t upload --upload-port COM7
 ```
 ## 配置
 - 串口速率：115200，无校验
+
+## 测试
+使用 modbus slaver 测试：
+<img src="./2.png">

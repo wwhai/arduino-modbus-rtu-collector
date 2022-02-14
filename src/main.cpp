@@ -6,13 +6,17 @@ void setup()
   Serial.begin(115200);
   ModbusRTUClient.begin(115200);
 }
+float compute(int v)
+{
+  return v * 5.0 / 1023.0;
+}
 
 void loop()
 {
-
-  ModbusRTUClient.coilWrite(1, 0x00, 0x00);
-  ModbusRTUClient.coilWrite(1, 0x01, 0x01);
-  ModbusRTUClient.coilWrite(1, 0x02, 0x00);
-  ModbusRTUClient.coilWrite(1, 0x03, 0x01);
+  ModbusRTUClient.holdingRegisterWrite(1, 0x00, analogRead(A0));
+  ModbusRTUClient.holdingRegisterWrite(1, 0x01, analogRead(A1));
+  ModbusRTUClient.holdingRegisterWrite(1, 0x02, analogRead(A2));
+  ModbusRTUClient.holdingRegisterWrite(1, 0x03, analogRead(A3));
+  ModbusRTUClient.holdingRegisterWrite(1, 0x04, analogRead(A4));
   delay(1000);
 }

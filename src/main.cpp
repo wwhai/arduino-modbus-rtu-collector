@@ -1,22 +1,49 @@
 #include <ArduinoRS485.h>
 #include <ArduinoModbus.h>
-
-void setup()
+int R = 2;
+int G = 4;
+int B = 7;
+void initIO()
 {
-  Serial.begin(115200);
-  ModbusRTUClient.begin(115200);
+  pinMode(R, OUTPUT);
+  pinMode(G, OUTPUT);
+  pinMode(B, OUTPUT);
+  digitalWrite(R, LOW);
+  digitalWrite(G, LOW);
+  digitalWrite(B, LOW);
 }
 float compute(int v)
 {
-  return v * 5.0 / 1023.0;
+  return v * (5.0 / 1023.0);
+}
+void setup()
+{
+  Serial.begin(115200);
+  ModbusRTUServer.begin(1, 115200);
+  ModbusRTUServer.configureCoils(0, 3);
+  initIO();
+}
+
+//
+// 设置灯色
+//
+void setRBG(int io, int addr)
+{
+  if (ModbusRTUServer.coilRead(addr))
+  {
+    digitalWrite(io, LOW);
+  }
+  else
+  {
+    digitalWrite(io, HIGH);
+  }
 }
 
 void loop()
 {
-  ModbusRTUClient.holdingRegisterWrite(1, 0x00, analogRead(A0));
-  ModbusRTUClient.holdingRegisterWrite(1, 0x01, analogRead(A1));
-  ModbusRTUClient.holdingRegisterWrite(1, 0x02, analogRead(A2));
-  ModbusRTUClient.holdingRegisterWrite(1, 0x03, analogRead(A3));
-  ModbusRTUClient.holdingRegisterWrite(1, 0x04, analogRead(A4));
-  delay(1000);
+  setRBG(R, 0);
+  setRBG(G, 1);
+  setRBG(B, 2);
+
+  ModbusRTUServer.poll();
 }

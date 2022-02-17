@@ -5,7 +5,7 @@
 
 ## 构建
 ```sh
-pio run -e esp12e -t upload --upload-port COM7
+pio run -e uno -t upload --upload-port COM7
 ```
 ## 配置
 - 串口速率：115200，无校验
